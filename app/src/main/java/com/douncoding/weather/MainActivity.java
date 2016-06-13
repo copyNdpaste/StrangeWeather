@@ -39,8 +39,17 @@ public class MainActivity extends AppCompatActivity {
         mLocationSearch = (Button)findViewById(R.id.loc_search_button);
 
         setupWeekWeatherForecastView();
+    }
 
-        Log.e("CHECK", "개수:" + mWeekWeatherAdapter.getItemCount());
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new WeatherForecast("1159068000").execute();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     private void setupWeekWeatherForecastView() {
