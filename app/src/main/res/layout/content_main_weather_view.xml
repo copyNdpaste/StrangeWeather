@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
-                    android:id="@+id/temperature"
+                    android:id="@+id/temperature_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
@@ -133,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_humidity_white"/>
             <TextView
-                android:id="@+id/humidity"
+                android:id="@+id/humidity_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="5dp"
@@ -156,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_rainfall_white"/>
             <TextView
-                android:id="@+id/rainfall"
+                android:id="@+id/rainfall_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="5dp"
@@ -179,7 +179,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_wind_speed_white"/>
             <TextView
-                android:id="@+id/wind_direction"
+                android:id="@+id/wind_speed_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="5dp"
