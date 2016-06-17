@@ -149,8 +149,8 @@ public class SupportedZone {
 
         for (String key : mTownZoneList.keySet()) {
             for (Zone zone : mTownZoneList.get(key)) {
-                String entry = key + " " + zone.name +"시";
-                supportedZoneList.add(entry);
+                //String entry = key + " " + zone.name +"시";
+                supportedZoneList.add(zone.name);
             }
         }
 

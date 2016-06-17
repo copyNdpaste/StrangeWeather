@@ -1,5 +1,7 @@
 package com.douncoding.weather;
 
+import android.util.Log;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -72,6 +74,8 @@ public class WeatherFactory {
         if (type == ForecastType.TOWN) {
             Node dayNode = data.getElementsByTagName(TownToken.DAY).item(0);
             Node hourNode = data.getElementsByTagName(TownToken.HOUR).item(0);
+
+            Log.d("CHECK", "dayNode:" + dayNode.getTextContent() + "//hourNode:" + hourNode.getTextContent());
 
             Calendar c = Calendar.getInstance();
             c.setTime(publish);

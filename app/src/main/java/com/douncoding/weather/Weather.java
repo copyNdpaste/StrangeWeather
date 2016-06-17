@@ -38,6 +38,10 @@ public class Weather {
         return c.get(Calendar.HOUR_OF_DAY);
     }
 
+    public Date getDate() {
+        return date;
+    }
+
     public void setDate(Date time) {
         this.date = time;
     }
@@ -95,7 +99,7 @@ public class Weather {
     }
 
     public void setWindSpeed(String windSpeed) {
-        this.windSpeed = windSpeed;
+        this.windSpeed = windSpeed.substring(0,3);
     }
 
     public String getWindDirection() {

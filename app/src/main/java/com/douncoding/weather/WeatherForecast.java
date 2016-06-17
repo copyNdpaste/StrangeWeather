@@ -9,10 +9,14 @@ import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -55,13 +59,15 @@ public class WeatherForecast {
      */
     public void execute(String cityName){
         if (!isRunning) {
+            if (cityName != null)
+                this.cityName = cityName;
+
             SupportedZone supportedZone = SupportedZone.getInstance();
-            this.termCode = supportedZone.getDoCodeFromSi(cityName);
-            this.townCode = supportedZone.getSiCode(cityName);
-            this.cityName = cityName;
+            this.termCode = supportedZone.getDoCodeFromSi(this.cityName);
+            this.townCode = supportedZone.getSiCode(this.cityName);
 
             Log.i(TAG, String.format("지역:%s 동네예보:%s 중기예보:%s 기상예보 워커 실행",
-                    cityName, townCode, termCode));
+                    this.cityName, townCode, termCode));
             // 예외처리
             if (termCode == null || termCode == null) {
                 throw new NullPointerException("잘못된 지역 정보를 입력하였습니다.");
@@ -97,7 +103,7 @@ public class WeatherForecast {
     }
 
     /**
-     * 가장 가까운 시간의 오늘 날씨 정보
+     * 가장 가까운 미래의 날씨 정보
      */
     public Weather getCurrentWeather() {
         errorHandle();
@@ -105,9 +111,15 @@ public class WeatherForecast {
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
 
-        HashMap<Integer, Weather> map =  mWeatherPerDateMap.get(day);
-        SortedSet<Integer> keys = new TreeSet<>(map.keySet());
-        return map.get(keys.first());
+        HashMap<Integer, Weather> todayMap =  mWeatherPerDateMap.get(day);
+        if (todayMap != null) {
+            SortedSet<Integer> keys = new TreeSet<>(todayMap.keySet());
+            return todayMap.get(keys.first());
+        } else {
+            HashMap<Integer, Weather> map =  mWeatherPerDateMap.get(day+1);
+            SortedSet<Integer> keys = new TreeSet<>(map.keySet());
+            return map.get(keys.first());
+        }
     }
 
     /**
@@ -125,6 +137,21 @@ public class WeatherForecast {
     }
 
     /**
+     * 입력된 날짜의 기상정보 목록
+     * @param day
+     * @return
+     */
+    public List<Weather> getWeatherList(int day) {
+        List<Weather> list = new ArrayList<>();
+
+        HashMap<Integer, Weather> map =  mWeatherPerDateMap.get(day);
+        for (Integer key : map.keySet()) {
+            list.add(map.get(key));
+        }
+        return list;
+    }
+
+    /**
      * 가장 가까운 시간(0시)의 모레 날씨 정보
      * @return
      */
@@ -137,6 +164,42 @@ public class WeatherForecast {
         HashMap<Integer, Weather> map =  mWeatherPerDateMap.get(day);
         SortedSet<Integer> keys = new TreeSet<>(map.keySet());
         return map.get(keys.first());
+    }
+
+    /**
+     * 기상예보
+     * 내일, 모레, 이후의 모든 0시의 날씨를 반환한다. 
+     * @return
+     */
+    public List<Weather> getFutureWeathersOfZero() {
+        List<Weather> weathers = new ArrayList<>();
+
+        Calendar c = Calendar.getInstance();
+        int today = c.get(Calendar.DAY_OF_MONTH);
+
+        // 일자별 23시의 데이터 수집
+        for (Integer day : mWeatherPerDateMap.keySet()) {
+            HashMap<Integer, Weather> map = mWeatherPerDateMap.get(day);
+
+            if (today == day) continue;
+
+            for (Integer hour : map.keySet()) {
+                if (hour == 0) {
+                    weathers.add(map.get(hour));
+                    break;
+                }
+            }
+        }
+
+        // 날짜 순 정렬
+        Collections.sort(weathers, new Comparator<Weather>() {
+            @Override
+            public int compare(Weather lhs, Weather rhs) {
+                return lhs.getDate().compareTo(rhs.getDate());
+            }
+        });
+
+        return weathers;
     }
 
     public List<Weather> getWeatherListWithThreeHour() {
@@ -210,6 +273,10 @@ public class WeatherForecast {
                 termDocument.getDocumentElement().normalize();
                 parseToCacheFromMidTermRSS(termDocument);
 
+
+                Calendar c = Calendar.getInstance();
+                generateMinMaxTemperature(mWeatherPerDateMap.get(c.get(Calendar.DAY_OF_MONTH)+1));
+                generateMinMaxTemperature(mWeatherPerDateMap.get(c.get(Calendar.DAY_OF_MONTH)+2));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -255,6 +322,35 @@ public class WeatherForecast {
                                 ForecastType.MID_TERM, mTermPublishDate, dataElmt));
                     }
                 }
+            }
+        }
+
+        /**
+         * 내일과 모레 날씨정보는 최저/최고 온도가 없는 상태임으로
+         * 수집된 시간별 온도정보를 기준으로 값을 생성한다.
+         * @param dayWeatherMap 내일 또는 모레 날씨목록
+         */
+        private void generateMinMaxTemperature(HashMap<Integer, Weather> dayWeatherMap) {
+            if (dayWeatherMap == null || dayWeatherMap.size() < 2) {
+                throw new NullPointerException("최저 최고온도 생성 오류");
+            }
+
+            List<Map.Entry<Integer, Weather>> list = new LinkedList<>(dayWeatherMap.entrySet());
+
+            Collections.sort(list, new Comparator<Map.Entry<Integer, Weather>>() {
+                @Override
+                public int compare(Map.Entry<Integer, Weather> lhs, Map.Entry<Integer, Weather> rhs) {
+                    return Float.valueOf(lhs.getValue().getTemperature()).compareTo(
+                            Float.valueOf(rhs.getValue().getTemperature()));
+                }
+            });
+
+            Map.Entry<Integer, Weather> minEntry = list.get(0);
+            Map.Entry<Integer, Weather> maxEntry = list.get(list.size()-1);
+
+            for (Integer key : dayWeatherMap.keySet()) {
+                dayWeatherMap.get(key).setMinTemperature(minEntry.getValue().getTemperature());
+                dayWeatherMap.get(key).setMaxTemperature(maxEntry.getValue().getTemperature());
             }
         }
     }

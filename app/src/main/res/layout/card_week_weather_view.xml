@@ -8,20 +8,70 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="120dp"
         android:padding="16dp">
 
-        <!-- 날씨 기본 정보 -->
+        <!-- 일자 정보 -->
+        <LinearLayout
+            android:id="@+id/date_panel"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+                <TextView
+                    android:id="@+id/month_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="16sp"
+                    android:text="6"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="16sp"
+                    android:text="."/>
+                <TextView
+                    android:id="@+id/date_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="16sp"
+                    android:text="16"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/day_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:text="(수)"/>
+        </LinearLayout>
+
+        <!-- 날씨 정보 -->
         <LinearLayout
             android:id="@+id/one_content_panel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_alignParentStart="true">
+            android:layout_toRightOf="@id/date_panel">
+
             <ImageView
                 android:id="@+id/weather_icon"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/ic_sample"
                 android:tint="@color/colorPrimary"/>
@@ -32,30 +82,57 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="16sp"
-                android:text="구름 많음"/>
+                android:textSize="16sp"/>
         </LinearLayout>
 
         <!-- 날씨 세부정보 -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true">
-
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
-                    android:id="@+id/temperature_text"
+                    android:id="@+id/min_temperature_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="60sp"
-                    android:text="24"/>
+                    android:maxLength="2"
+                    android:textSize="42sp"/>
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/ic_degree_white"
+                    android:tint="@color/colorPrimaryDark"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:textStyle="bold"
+                android:textSize="36sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="/"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/max_temperature_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLength="2"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="42sp"/>
 
                 <ImageView
                     android:layout_width="20dp"
@@ -65,5 +142,6 @@
                     android:tint="@color/colorPrimaryDark"/>
             </LinearLayout>
         </LinearLayout>
+
     </RelativeLayout>
 </android.support.v7.widget.CardView>

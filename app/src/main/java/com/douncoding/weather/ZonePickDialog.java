@@ -9,12 +9,14 @@ import java.util.ArrayList;
 
 public class ZonePickDialog {
 
-    public static OnListener listener;
+    public static OnListener onListener;
 
     private static ArrayList<String> mSupportedZoneName;
 
-    public static void show(Context context) {
+    public static void show(Context context, OnListener listener) {
         final SupportedZone zone = SupportedZone.getInstance();
+        onListener = listener;
+
         mSupportedZoneName = new ArrayList<>(zone.getSupportedZoneList());
 
         new MaterialDialog.Builder(context)
@@ -27,7 +29,7 @@ public class ZonePickDialog {
     static MaterialDialog.ListCallback listCallback = new MaterialDialog.ListCallback() {
         @Override
         public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-            listener.onClick(mSupportedZoneName.get(which));
+            onListener.onClick(mSupportedZoneName.get(which));
         }
     };
 

@@ -1,5 +1,7 @@
 package com.douncoding.weather;
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,5 +37,65 @@ public class Utils {
             e.printStackTrace();
         }
         return date;
+    }
+
+    public static String currentStringTime() {
+        SimpleDateFormat formatter = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss", Locale.KOREA );
+        Date currentTime = new Date ( );
+        String dTime = formatter.format ( currentTime );
+
+        return dTime;
+    }
+
+    /**
+     * 날씨 별 아이콘 설정
+     * @param wtString 날씨상태
+     * @return
+     */
+    public static int weatherStringToIcon(String wtString) {
+        if (wtString.equals("맑음")) {
+            return R.drawable.ic_weather_sun;
+        } else if (wtString.equals("구름 조금")) {
+            return R.drawable.ic_weather_little_cloud;
+        } else if (wtString.equals("구름많음")) {
+            return R.drawable.ic_weather_many_cloud;
+        } else if (wtString.equals("흐리고 비")) {
+            return R.drawable.ic_weather_cloudy_rain;
+        } else if (wtString.equals("비")) {
+            return R.drawable.ic_weather_rain;
+        } else {
+            Log.w("CHECK", "등록된 이미지가 없습니다.");
+            return R.drawable.ic_sample;
+        }
+    }
+
+    public static String dayToString(int dayNum) {
+        String day = null;
+
+        switch(dayNum){
+            case 1:
+                day = "일";
+                break ;
+            case 2:
+                day = "월";
+                break ;
+            case 3:
+                day = "화";
+                break ;
+            case 4:
+                day = "수";
+                break ;
+            case 5:
+                day = "목";
+                break ;
+            case 6:
+                day = "금";
+                break ;
+            case 7:
+                day = "토";
+                break ;
+
+        }
+        return day;
     }
 }
