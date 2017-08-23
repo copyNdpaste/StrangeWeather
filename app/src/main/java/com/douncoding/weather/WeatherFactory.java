@@ -5,11 +5,8 @@ import android.util.Log;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 public class WeatherFactory {
     /**
@@ -71,47 +68,48 @@ public class WeatherFactory {
     public static Weather create(ForecastType type, Date publish, Element data) {
         Weather weather = new Weather();
 
-        if (type == ForecastType.TOWN) {
+        if (type == ForecastType.TOWN) { //예보 타입이 도시라면 (상단 파란색 화면 부분)
             Node dayNode = data.getElementsByTagName(TownToken.DAY).item(0);
             Node hourNode = data.getElementsByTagName(TownToken.HOUR).item(0);
 
             Log.d("CHECK", "dayNode:" + dayNode.getTextContent() + "//hourNode:" + hourNode.getTextContent());
 
-            Calendar c = Calendar.getInstance();
-            c.setTime(publish);
-            c.set(Calendar.DAY_OF_MONTH, publish.getDate() + Integer.valueOf(dayNode.getTextContent()));
-            c.set(Calendar.HOUR_OF_DAY, Integer.valueOf(hourNode.getTextContent()));
+            Calendar c = Calendar.getInstance(); //달력 인스턴스
+            c.setTime(publish); //시간 배포
+            c.set(Calendar.DAY_OF_MONTH, publish.getDate() + Integer.valueOf(dayNode.getTextContent())); //날짜
+            c.set(Calendar.HOUR_OF_DAY, Integer.valueOf(hourNode.getTextContent())); //시간
             weather.setDate(c.getTime());
 
             Node tempNode = data.getElementsByTagName(TownToken.TEMP).item(0);
-            weather.setTemperature(tempNode.getTextContent());
+            weather.setTemperature(tempNode.getTextContent()); //온도
 
             Node humNode = data.getElementsByTagName(TownToken.HUMIDITY).item(0);
-            weather.setHumidity(humNode.getTextContent());
+            weather.setHumidity(humNode.getTextContent()); //습도
 
             Node weatherNode = data.getElementsByTagName(TownToken.WEATHER).item(0);
-            weather.setWeather(weatherNode.getTextContent());
+            weather.setWeather(weatherNode.getTextContent()); //날씨
 
             Node windNode = data.getElementsByTagName(TownToken.WIND).item(0);
-            weather.setWindSpeed(windNode.getTextContent());
+            weather.setWindSpeed(windNode.getTextContent()); //풍속
 
             Node rainNode = data.getElementsByTagName(TownToken.RAINFALL_6HOUR).item(0);
-            weather.setRainfall(String.valueOf(Float.valueOf(rainNode.getTextContent())/6.0).substring(0,3));
+            weather.setRainfall(String.valueOf(Float.valueOf(rainNode.getTextContent())/6.0).substring(0,3)); //비
 
             Node rainChanceNode = data.getElementsByTagName(TownToken.CAHCE_OF_RAIN).item(0);
-            weather.setChanceOfrain(rainChanceNode.getTextContent());
-        } else if (type == ForecastType.MID_TERM){
+            weather.setChanceOfrain(rainChanceNode.getTextContent()); //강수확률
+        }
+        else if (type == ForecastType.MID_TERM){ //예보 타입이 중기 예보라면 (카드 뷰 부분)
             Node timeNode = data.getElementsByTagName(MidTermToken.TIME).item(0);
-            weather.setDate(Utils.convertStringToDateType2(timeNode.getTextContent()));
+            weather.setDate(Utils.convertStringToDateType2(timeNode.getTextContent())); //날짜
 
             Node maxTempNode = data.getElementsByTagName(MidTermToken.TEMP_MAX).item(0);
-            weather.setMaxTemperature(maxTempNode.getTextContent());
+            weather.setMaxTemperature(maxTempNode.getTextContent()); //최대 온도
 
             Node minTempNode = data.getElementsByTagName(MidTermToken.TEMP_MIN).item(0);
-            weather.setMinTemperature(minTempNode.getTextContent());
+            weather.setMinTemperature(minTempNode.getTextContent()); //최저 온도
 
             Node weatherNode = data.getElementsByTagName(MidTermToken.WEATHER).item(0);
-            weather.setWeather(weatherNode.getTextContent());
+            weather.setWeather(weatherNode.getTextContent()); //날씨
         }
 
         return weather;

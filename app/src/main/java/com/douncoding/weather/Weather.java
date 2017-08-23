@@ -25,13 +25,13 @@ public class Weather {
     String windSpeed;
     String windDirection;
 
-    public int getForecastDay() {
+    public int getForecastDay() { //예보 날짜
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         return c.get(Calendar.DAY_OF_MONTH);
     }
 
-    public int getForecastHour() {
+    public int getForecastHour() { //예보 시간
         Calendar c = Calendar.getInstance();
         c.setTime(date);
 

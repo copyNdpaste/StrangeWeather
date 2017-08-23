@@ -58,18 +58,18 @@ public class WeatherForecast {
      * @param cityName 지역(시) 이름
      */
     public void execute(String cityName){
-        if (!isRunning) {
-            if (cityName != null)
-                this.cityName = cityName;
+        if (!isRunning) { //로딩중이 아니라면
+            if (cityName != null) //도시 이름이 null이 아니라면
+                this.cityName = cityName; //도시 이름
 
             SupportedZone supportedZone = SupportedZone.getInstance();
-            this.termCode = supportedZone.getDoCodeFromSi(this.cityName);
-            this.townCode = supportedZone.getSiCode(this.cityName);
+            this.termCode = supportedZone.getDoCodeFromSi(this.cityName); //
+            this.townCode = supportedZone.getSiCode(this.cityName); //시 코드
 
             Log.i(TAG, String.format("지역:%s 동네예보:%s 중기예보:%s 기상예보 워커 실행",
                     this.cityName, townCode, termCode));
             // 예외처리
-            if (termCode == null || termCode == null) {
+            if (termCode == null || townCode == null) {
                 throw new NullPointerException("잘못된 지역 정보를 입력하였습니다.");
             }
             new Worker().execute();
@@ -100,23 +100,24 @@ public class WeatherForecast {
 
     public String getCityName() {
         return this.cityName;
-    }
+    } //도시 이름 얻어옴
 
     /**
-     * 가장 가까운 미래의 날씨 정보
+     * 가장 가까운
+     * 미래의 날씨 정보
      */
-    public Weather getCurrentWeather() {
+    public Weather getCurrentWeather() { //현재 날씨
         errorHandle();
 
-        Calendar c = Calendar.getInstance();
-        int day = c.get(Calendar.DAY_OF_MONTH);
+        Calendar c = Calendar.getInstance(); //달력에서 인스턴스 받아옴
+        int day = c.get(Calendar.DAY_OF_MONTH); //해당 달의 날짜를 날로 지정
 
-        HashMap<Integer, Weather> todayMap =  mWeatherPerDateMap.get(day);
+        HashMap<Integer, Weather> todayMap =  mWeatherPerDateMap.get(day);//오늘 날씨
         if (todayMap != null) {
             SortedSet<Integer> keys = new TreeSet<>(todayMap.keySet());
             return todayMap.get(keys.first());
         } else {
-            HashMap<Integer, Weather> map =  mWeatherPerDateMap.get(day+1);
+            HashMap<Integer, Weather> map =  mWeatherPerDateMap.get(day+1);//내일 날씨
             SortedSet<Integer> keys = new TreeSet<>(map.keySet());
             return map.get(keys.first());
         }
@@ -129,7 +130,7 @@ public class WeatherForecast {
         errorHandle();
 
         Calendar c = Calendar.getInstance();
-        int day = c.get(Calendar.DAY_OF_MONTH)+1;
+        int day = c.get(Calendar.DAY_OF_MONTH)+1;//내일
 
         HashMap<Integer, Weather> map =  mWeatherPerDateMap.get(day);
         SortedSet<Integer> keys = new TreeSet<>(map.keySet());
@@ -159,7 +160,7 @@ public class WeatherForecast {
         errorHandle();
 
         Calendar c = Calendar.getInstance();
-        int day = c.get(Calendar.DAY_OF_MONTH)+2;
+        int day = c.get(Calendar.DAY_OF_MONTH)+2;//모레
 
         HashMap<Integer, Weather> map =  mWeatherPerDateMap.get(day);
         SortedSet<Integer> keys = new TreeSet<>(map.keySet());
@@ -345,8 +346,8 @@ public class WeatherForecast {
                 }
             });
 
-            Map.Entry<Integer, Weather> minEntry = list.get(0);
-            Map.Entry<Integer, Weather> maxEntry = list.get(list.size()-1);
+            Map.Entry<Integer, Weather> minEntry = list.get(0); //최저온도는 리스트의 첫번째 데이터
+            Map.Entry<Integer, Weather> maxEntry = list.get(list.size()-1); //최고 온도는 리스트의 마지막 데이터
 
             for (Integer key : dayWeatherMap.keySet()) {
                 dayWeatherMap.get(key).setMinTemperature(minEntry.getValue().getTemperature());

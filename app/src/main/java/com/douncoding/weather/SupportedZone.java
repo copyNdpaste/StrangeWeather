@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,11 +22,13 @@ public class SupportedZone {
      * '도' / '코드' 형태
      * 예제) 경기도 - 109
      */
+    //                  도   도 코드
     private HashMap<String, String> mDoZoneList;
     /**
      * '도' / '시 코드' 목록
      * 예제) 경기도 - [수원:4111000000 ...]
      */
+    //                  시   시 코드
     private HashMap<String, ArrayList<Zone>> mTownZoneList;
 
     private static SupportedZone instance = null;
@@ -38,10 +39,10 @@ public class SupportedZone {
     }
 
     public static SupportedZone getInstance() {
-        if (instance == null) {
-            instance = new SupportedZone();
+        if (instance == null) { //인스턴스가 null이면
+            instance = new SupportedZone(); //인스턴스에 지역 대입
         }
-        return instance;
+        return instance; //지역 반환
     }
 
     /**
@@ -49,18 +50,18 @@ public class SupportedZone {
      * @param resources
      */
     public void setup(Resources resources) {
-        JsonResourceReader reader = new JsonResourceReader(
+        JsonResourceReader reader = new JsonResourceReader( //supported_zon에 있는 데이터를 Json 리더로 가져온다.
                 resources, R.raw.supported_zone);
 
         try {
-            JSONObject root = new JSONObject(reader.getJsonString());
-            JSONArray supportedList = root.getJSONArray("supported");
+            JSONObject root = new JSONObject(reader.getJsonString()); //Json 문자열을 받아옴
+            JSONArray supportedList = root.getJSONArray("supported"); // /res/raw/supported_zon에서 supported 라는 이름의 배열을 리스트로 받아옴
 
-            for (int i = 0; i < supportedList.length(); i++) {
-                JSONObject entry = supportedList.getJSONObject(i);
-                String doName = entry.getString("이름");
-                String doCode = entry.getString("코드");
-                JSONArray array = entry.getJSONArray("도시");
+            for (int i = 0; i < supportedList.length(); i++) { //DB의 길이만큼
+                JSONObject entry = supportedList.getJSONObject(i); //리스트의 객체 하나하나를 entry에 넣는다
+                String doName = entry.getString("이름"); //이름을 도 이름으로
+                String doCode = entry.getString("코드"); //코드를 도 코드로
+                JSONArray array = entry.getJSONArray("도시"); //도시라는 배열을 array에
 
                 // '도' 추가
                 mDoZoneList.put(doName, doCode);
@@ -106,6 +107,7 @@ public class SupportedZone {
      * @param name '시' 이름
      * @return 조회번호
      */
+
     public String getDoCodeFromSi(String name) {
         String targetCode = null;
 
@@ -132,7 +134,7 @@ public class SupportedZone {
         for (String key : mTownZoneList.keySet()) {
             for (Zone zone : mTownZoneList.get(key)) {
                 if (zone.name.equals(name)) {
-                    targetName = key + " " + zone.name +"시";
+                    targetName = zone.name ;
                     break;
                 }
             }

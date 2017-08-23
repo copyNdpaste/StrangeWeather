@@ -6,20 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
-import java.util.SortedSet;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -83,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
 
         // 기상청 날씨정보 내려받기
-        mWeatherForecast.execute("춘천");
+        mWeatherForecast.execute("서울");
     }
 
     @Override
@@ -111,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ProgressDialog progressDialog;
 
         @Override
-        public void onStarted() {
+        public void onStarted() { //새로고침
             progressDialog = new ProgressDialog(MainActivity.this);
             progressDialog.setMessage("RSS 읽는중..");
             progressDialog.setCancelable(false);
@@ -164,12 +155,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
                 break;
-            case R.id.refresh:
+            case R.id.refresh: //새로고침
                 try {
                     mWeatherForecast.execute(null);
                 } catch (NullPointerException e) {
-                    // 기본값이 춘천
-                    mWeatherForecast.execute("춘천");
+                    // 기본값 서울
+                    mWeatherForecast.execute("서울");
                 }
                 break;
         }

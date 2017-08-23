@@ -26,10 +26,10 @@ public class ZonePickDialog {
                 .show();
     }
 
-    static MaterialDialog.ListCallback listCallback = new MaterialDialog.ListCallback() {
+    static MaterialDialog.ListCallback listCallback = new MaterialDialog.ListCallback() { //서울의 구 리스트
         @Override
         public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-            onListener.onClick(mSupportedZoneName.get(which));
+            onListener.onClick(mSupportedZoneName.get(which)); // 클릭된 구를 선택
         }
     };
 

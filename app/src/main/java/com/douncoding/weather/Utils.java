@@ -57,7 +57,7 @@ public class Utils {
             return R.drawable.ic_weather_sun;
         } else if (wtString.equals("구름 조금")) {
             return R.drawable.ic_weather_little_cloud;
-        } else if (wtString.equals("구름많음")) {
+        } else if (wtString.equals("구름 많음")) {
             return R.drawable.ic_weather_many_cloud;
         } else if (wtString.equals("흐리고 비")) {
             return R.drawable.ic_weather_cloudy_rain;
