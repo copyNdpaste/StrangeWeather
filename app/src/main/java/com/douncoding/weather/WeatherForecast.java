@@ -272,12 +272,12 @@ public class WeatherForecast {
                 // 중기예보 파싱
                 Document termDocument = documentBuilder.parse(termUrl + termCode);
                 termDocument.getDocumentElement().normalize();
-                parseToCacheFromMidTermRSS(termDocument);
+      //          parseToCacheFromMidTermRSS(termDocument);
 
 
                 Calendar c = Calendar.getInstance();
-                generateMinMaxTemperature(mWeatherPerDateMap.get(c.get(Calendar.DAY_OF_MONTH)+1));
-                generateMinMaxTemperature(mWeatherPerDateMap.get(c.get(Calendar.DAY_OF_MONTH)+2));
+                generateMinMaxTemperature(mWeatherPerDateMap.get(c.get(Calendar.DAY_OF_MONTH)+1)); //내일 최저 최고 온도 생성
+                generateMinMaxTemperature(mWeatherPerDateMap.get(c.get(Calendar.DAY_OF_MONTH)+2)); //모레 최저 최고 온도 생성
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -303,7 +303,7 @@ public class WeatherForecast {
                 addWeather(WeatherFactory.create(ForecastType.TOWN, mTownPublishDate, element));
             }
         }
-
+/*
         private void parseToCacheFromMidTermRSS(Document document) {
             // 중기예보 - 발행시간 파싱
             Element publishTime = (Element)document.getElementsByTagName("tm").item(0);
@@ -325,7 +325,7 @@ public class WeatherForecast {
                 }
             }
         }
-
+*/
         /**
          * 내일과 모레 날씨정보는 최저/최고 온도가 없는 상태임으로
          * 수집된 시간별 온도정보를 기준으로 값을 생성한다.

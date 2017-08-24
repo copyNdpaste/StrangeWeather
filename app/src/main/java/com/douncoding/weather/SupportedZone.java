@@ -23,7 +23,7 @@ public class SupportedZone {
      * 예제) 경기도 - 109
      */
     //                  도   도 코드
-    private HashMap<String, String> mDoZoneList;
+   private HashMap<String, String> mDoZoneList;
     /**
      * '도' / '시 코드' 목록
      * 예제) 경기도 - [수원:4111000000 ...]
@@ -31,11 +31,16 @@ public class SupportedZone {
     //                  시   시 코드
     private HashMap<String, ArrayList<Zone>> mTownZoneList;
 
+
+    private HashMap<String, ArrayList<Zone>> TownList;
+
+
     private static SupportedZone instance = null;
 
     private SupportedZone() {
         mDoZoneList = new HashMap<>();
         mTownZoneList = new HashMap<>();
+
     }
 
     public static SupportedZone getInstance() {
@@ -60,7 +65,7 @@ public class SupportedZone {
             for (int i = 0; i < supportedList.length(); i++) { //DB의 길이만큼
                 JSONObject entry = supportedList.getJSONObject(i); //리스트의 객체 하나하나를 entry에 넣는다
                 String doName = entry.getString("이름"); //이름을 도 이름으로
-                String doCode = entry.getString("코드"); //코드를 도 코드로
+                 String doCode = entry.getString("코드"); //코드를 도 코드로
                 JSONArray array = entry.getJSONArray("도시"); //도시라는 배열을 array에
 
                 // '도' 추가
