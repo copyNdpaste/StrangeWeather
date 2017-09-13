@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView mHumidityTV;
     TextView mRainfallTV;
     TextView mWindSpeedTV;
-
+    TextView mChanceofRainTV;
     // Controller
     WeekWeatherAdapter mWeekWeatherAdapter;
     WeatherForecast mWeatherForecast;
@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRainfallTV = (TextView)findViewById(R.id.rainfall_text);
         mWindSpeedTV = (TextView)findViewById(R.id.wind_speed_text);
         mCurrentWeatherView = (View)findViewById(R.id.current_weather_panel);
+        mChanceofRainTV = (TextView)findViewById(R.id.chance_of_rain);
 
         // 중기기상 예보 리스트 뷰 설정
         mWeekWeatherListView = (RecyclerView)findViewById(R.id.week_weather_listview);
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             updateTodayWeatherForecastUI(mWeatherForecast.getCurrentWeather());
 
-            updateFutureWeatherForecastUI(mWeatherForecast.getFutureWeathersOfZero());
+            updateFutureWeatherForecastUI(mWeatherForecast.getFutureWeathersOfZero()); //내일, 모레 날씨
 
             progressDialog.dismiss();
         }
@@ -130,10 +131,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mWeatherTV.setText(weather.getWeather());
         mWeatherIV.setImageResource(Utils.weatherStringToIcon(weather.getWeather()));
 
-        mRainfallTV.setText(weather.getRainfall() + "mm");
-        mHumidityTV.setText(weather.getHumidity() + "%");
-        mWindSpeedTV.setText(weather.getWindSpeed() + "m/s");
-        mTemperatureTV.setText(weather.getTemperature());
+        mRainfallTV.setText(weather.getRainfall() + "mm"); //메인 화면의 강수량
+        mHumidityTV.setText(weather.getHumidity() + "%"); //습도
+        mWindSpeedTV.setText(weather.getWindSpeed() + "m/s");//풍속
+        mTemperatureTV.setText(weather.getTemperature()); //온도
+        mChanceofRainTV.setText(weather.getChanceOfrain()+"%"); // 강수확률
     }
 
     /**

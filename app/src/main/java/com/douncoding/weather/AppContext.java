@@ -12,5 +12,4 @@ public class AppContext extends Application {
         SupportedZone supportedZone = SupportedZone.getInstance();
         supportedZone.setup(getResources());
     }
-
 }

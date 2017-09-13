@@ -90,8 +90,8 @@ class WeekWeatherAdapter extends RecyclerView.Adapter<WeekWeatherAdapter.DataHol
 
     @Override
     public int getItemCount() {
-        return mDataSet.size();
-    }//DataSet의 크기만큼 센다.
+        return mDataSet.size()-1;//DataSet의 크기만큼 센다. 카드뷰에서 갯수가 안맞은 이유 : 데이터 셋의 크기
+    }
 
     public void refresh(List<Weather> items) { //새로고침
         mDataSet.clear(); //DataSet을 초기화하고

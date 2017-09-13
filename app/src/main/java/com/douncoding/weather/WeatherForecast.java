@@ -27,9 +27,9 @@ public class WeatherForecast {
     public static final String TAG = WeatherForecast.class.getSimpleName();
 
     private final String townUrl = "http://web.kma.go.kr/wid/queryDFSRSS.jsp?zone=";
-    private final String termUrl = "http://web.kma.go.kr/weather/forecast/mid-term-rss3.jsp?stnId=";
+//    private final String termUrl = "http://web.kma.go.kr/weather/forecast/mid-term-rss3.jsp?stnId=";
     private String townCode;
-    private String termCode;
+//    private String termCode;
     private String cityName;
 
     /**
@@ -43,7 +43,7 @@ public class WeatherForecast {
     // 기상청 동네예보 발생 시간
     private Date mTownPublishDate;
     // 기상청 중기예보 발생 시간
-    private Date mTermPublishDate;
+   // private Date mTermPublishDate;
 
     // 로딩상태 표현
     private boolean isRunning = false;
@@ -63,13 +63,14 @@ public class WeatherForecast {
                 this.cityName = cityName; //도시 이름
 
             SupportedZone supportedZone = SupportedZone.getInstance();
-            this.termCode = supportedZone.getDoCodeFromSi(this.cityName); //
+           // this.termCode = supportedZone.getDoCodeFromSi(this.cityName);
             this.townCode = supportedZone.getSiCode(this.cityName); //시 코드
 
-            Log.i(TAG, String.format("지역:%s 동네예보:%s 중기예보:%s 기상예보 워커 실행",
-                    this.cityName, townCode, termCode));
+       //     Log.i(TAG, String.format("지역:%s 동네예보:%s 중기예보:%s 기상예보 워커 실행",
+          //          this.cityName, townCode, termCode));
             // 예외처리
-            if (termCode == null || townCode == null) {
+           // if (termCode == null || townCode == null) {
+                if (townCode == null) {
                 throw new NullPointerException("잘못된 지역 정보를 입력하였습니다.");
             }
             new Worker().execute();
@@ -106,7 +107,8 @@ public class WeatherForecast {
      * 가장 가까운
      * 미래의 날씨 정보
      */
-    public Weather getCurrentWeather() { //현재 날씨
+
+    public Weather getCurrentWeather() { //현재 날씨 메인 화면의 파란 곳의 정보
         errorHandle();
 
         Calendar c = Calendar.getInstance(); //달력에서 인스턴스 받아옴
@@ -172,6 +174,7 @@ public class WeatherForecast {
      * 내일, 모레, 이후의 모든 0시의 날씨를 반환한다. 
      * @return
      */
+
     public List<Weather> getFutureWeathersOfZero() {
         List<Weather> weathers = new ArrayList<>();
 
@@ -206,11 +209,11 @@ public class WeatherForecast {
     public List<Weather> getWeatherListWithThreeHour() {
         return null;
     }
-
+/*
     public List<Weather> getMidTermWeather() {
         return null;
     }
-
+*/
     // ===================================================================================
     // 공개 API 종료점
     // ===================================================================================
@@ -270,9 +273,9 @@ public class WeatherForecast {
                 parseToCacheFromTownRSS(townDocument);
 
                 // 중기예보 파싱
-                Document termDocument = documentBuilder.parse(termUrl + termCode);
-                termDocument.getDocumentElement().normalize();
-      //          parseToCacheFromMidTermRSS(termDocument);
+               // Document termDocument = documentBuilder.parse(termUrl + termCode);
+         //       termDocument.getDocumentElement().normalize();
+       //         parseToCacheFromMidTermRSS(termDocument);
 
 
                 Calendar c = Calendar.getInstance();
